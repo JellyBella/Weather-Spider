@@ -3,12 +3,12 @@ from urllib import request
 import csv
 import pymysql
 
-# 爬取网页
+# Web-crawling, here I used weatherzone to crawl last 24 hours weather data in Geelong, Melbourne
 with request.urlopen('http://www.weatherzone.com.au/station.jsp?lt=site&lc=87184&list=ob') as response:
    html = response.read()
 soup = BeautifulSoup(html, 'html.parser')
 
-# 解析数据
+# Analyze web data and find the info you need
 div = soup.find('table', attrs = {'class':'standard-table'})
 tr = div.find_all('tr')
 #print(tr)
@@ -31,6 +31,7 @@ with open('data.csv', 'w+') as myfile:
      wr.writerows(data)
 
 if __name__ == "__main__":
+# Store into database, here is mysql
     db = pymysql.connect(host="localhost",user="root",password="",db="test",charset="utf8mb4")
     cursor = db.cursor()
     cursor.execute("DROP TABLE IF EXISTS weather")
